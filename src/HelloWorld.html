@@ -8,13 +8,19 @@
         text-align: center;
         min-width: 500px;
       }
+      #terminal{
+        text-align: left;
+      }
     </style>
     <script src="http://code.jquery.com/jquery.min.js"></script>
+
     <script>
 
       // log function
       log = function(data){
-        $("div#terminal").prepend("</br>" +data);
+
+        $('#terminal').append("<pre>" + data + "</pre>");
+
         console.log(data);
       };
 
@@ -35,8 +41,9 @@
 
           // Handle incoming websocket message callback
           ws.onmessage = function(evt) {
-            log("Message Received: " + evt.data)
-            alert("message received: " + evt.data);
+          document.getElementById("jsonTerminal").innerHTML = "<pre>"+JSON.stringify(JSON.parse(evt.data),undefined,2)+"</pre>";
+              log(JSON.stringify(JSON.parse(evt.data),undefined,2));
+            alert("message received" + JSON.stringify(JSON.parse(evt.data),null,'\t'));
             };
 
           // Close Websocket callback
@@ -88,7 +95,7 @@
         <input type="submit" id="send" value="send" />
     </div>
     <div id="terminal">
-
     </div>
+    <div id="jsonTerminal"></div>
   </body>
 </html>

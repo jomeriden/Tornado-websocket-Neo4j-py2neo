@@ -38,7 +38,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 
     def on_message(self, message):
         print 'message received: %s' % message
-        result = json.dumps(executeQuery())
+        result = json.dumps(executeQuery(), sort_keys=True, indent=4, separators=(',', ': '))
         print 'sending back message: %s' % result
         self.write_message(result)
 
