@@ -9,22 +9,55 @@ import json
 uri = "bolt://localhost:7687"
 db = Graph()
 
-# query = """
-# MATCH (n:Device) WHERE n.id={id} RETURN n.description
-# """
-query2 = """
-MATCH (n:Device) RETURN n
-"""
+initialQuery = """
+ MATCH (n:type) WHERE n.id={id} RETURN n
+ """
+initialQueryList = """
+ MATCH (n:type) RETURN n
+ """
 
-# def executeQuery(_id):
-#    data = db.run(query, id=_id)
-#    for d in data:
-#        print(d)
-#    return data
+query4all = """
+ MATCH (n) RETURN n
+ """
 
 
-def executeQuery():
-    data = db.run(query2)
+def executeQuery(_id, _type):
+    if _id == "All":
+        query = initialQueryList.replace("type", _type)
+        data = db.run(query)
+    else:
+        query = initialQuery.replace("type", _type)
+        data = db.run(query, id=_id)
+    aux = []
+    for d in data:
+        print(d)
+        aux.append(d)
+    return aux
+
+
+def getType(message):
+    type = message.rpartition(':')[0]
+    print type
+    return type
+
+
+def getId(message):
+    head, sep, tail = message.partition(':')
+    print tail
+    return tail
+
+
+def getJson(message):
+    if message == "All":
+        dataResult = json.dumps(executeQuery4All(), sort_keys=True, indent=4, separators=(',', ': '))
+    else:
+        nodeType = getType(message)
+        nodeId = getId(message)
+        dataResult = json.dumps(executeQuery(nodeId, nodeType), sort_keys=True, indent=4, separators=(',', ': '))
+    return dataResult
+
+def executeQuery4All():
+    data = db.run(query4all)
     aux = []
     for d in data:
         print(d)
@@ -38,7 +71,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 
     def on_message(self, message):
         print 'message received: %s' % message
-        result = json.dumps(executeQuery(), sort_keys=True, indent=4, separators=(',', ': '))
+        result = getJson(message)
         print 'sending back message: %s' % result
         self.write_message(result)
 
