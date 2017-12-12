@@ -5,8 +5,6 @@ import tornado.ioloop
 from py2neo import Graph
 import json
 
-
-uri = "bolt://localhost:7687"
 db = Graph()
 
 initialQuery = """
