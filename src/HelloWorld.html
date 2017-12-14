@@ -1,103 +1,268 @@
 <!doctype html>
 <html>
-  <head>
-    <title>Smart Politech</title>
+<head>
+    <title>Websocket-Neo4j</title>
     <meta charset="utf-8" />
     <style type="text/css">
-      body {
-        text-align: center;
-        min-width: 500px;
-      }
-      #terminal{
-        text-align: left;
-      }
+
+        body {
+            text-align: center;
+            min-width: 500px;
+        }
+        
+        #headerImg #uexlogo{
+            float: left;
+            margin-top: 20px;
+            margin-left: 15px;
+        }
+        
+        #headerImg #epcclogo{
+            float: top;
+            width: 90px;
+            height: 90px;
+            margin-right: 11%;
+        }
+
+        #headerImg #splogo{
+            float: right;
+            width: 90px;
+            height: 90px;
+            margin-right: 25px;
+        }
+
+        #headerTitle{
+            padding-left: 10px;
+            color: white;
+            background-color: #333;
+            margin-bottom: 20px;
+        }
+
+        #headerTitle ul {
+
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+        }
+
+        #headerTitle li {
+            float: right;
+        }
+
+        #headerTitle .links {
+            width: 100px;
+        }
+
+        #headerTitle li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        #headerTitle li a:hover {
+            background-color: #111;
+        }
+
+        #headerTitle #lileft{
+            padding-top: 10px;
+            float: left;
+        }
+
+        #connection_details{
+            margin: 0 auto;
+            background-color: green;
+            border-radius: 15px;
+            width: 350px;
+            height: 180px;
+            padding-top: 20px;
+        }
+
+        .conn_input{
+            background:#ff0000;
+            margin-bottom: 10px;
+            height: 27px;
+            width: 220px;
+            padding-left: 10px;
+            color: aliceblue;
+            border-radius: 10px;
+            border-color: black;
+        }
+
+        #connection_details #open{
+            width: 80%;
+            height: 35px;
+            background-color: #333333;
+            border-color: green;
+            border-radius: 8px;
+            color: white;
+        }
+
+        #connection_details #open:hover{
+            border-color: #111111;
+            background-color: #333333;
+        }
+
+        #terminal{
+            text-align: left;
+            width: 500px;
+            margin: 40px auto 0 auto;
+            box-shadow: 0 0 30px rgba(0,0,0,0.4);
+            border-radius: 3px;
+        }
+
+        .shell-top-bar {
+            text-align: center;
+            color: #525252;
+            padding: 5px 0;
+            margin: 0;
+            text-shadow: 1px 1px 0 rgba(255,255,255,0.5);
+            font-size: 0.85em;
+            border: 1px solid #CCCCCC;
+            border-bottom: none;
+            border-radius: 3px;
+            background: #f7f7f7;
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7f7f7', endColorstr='#B8B8B8',GradientType=0 ); /* IE6-9 */
+        }
+
+        .shell-body {
+            margin: 0;
+            padding: 5px;
+            list-style: none;
+            background: #141414;
+            color: white;
+            font: 0.8em 'Andale Mono', Consolas, 'Courier New';
+            line-height: 1.6em;
+            -webkit-border-bottom-right-radius: 3px;
+            -webkit-border-bottom-left-radius: 3px;
+            -moz-border-radius-bottomright: 3px;
+            -moz-border-radius-bottomleft: 3px;
+            border-bottom-right-radius: 3px;
+            border-bottom-left-radius: 3px;
+        }
+
+        .shell-body li:before {
+            content: '$';
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .shell-body li {
+            text-align: left;
+            word-wrap: break-word;
+            position: relative;
+            padding: 0 0 0 15px;
+        }
+
+        #dataTerminal{
+            text-align: left;
+        }
     </style>
     <script src="http://code.jquery.com/jquery.min.js"></script>
 
     <script>
 
-      // log function
-      log = function(data){
+        // log function
+        log = function(data){
 
-        $('#terminal').append("<pre>" + data + "</pre>");
+            $('#terminalMsg').append("<li>" + data + "</li>");
 
-        console.log(data);
-      };
+            console.log(data);
+        };
 
-      $(document).ready(function () {
-        $("div#message_details").hide()
+        $(document).ready(function () {
+            $("div#message_details").hide()
 
-        var ws;
+            var ws;
 
-        $("#open").click(function(evt) {
-          evt.preventDefault();
+            $("#open").click(function(evt) {
+                evt.preventDefault();
 
-          var host = $("#host").val();
-          var port = $("#port").val();
-          var uri = $("#uri").val();
+                var host = $("#host").val();
+                var port = $("#port").val();
+                var uri = $("#uri").val();
 
-          // create websocket instance
-          ws = new WebSocket("ws://" + host + ":" + port + uri);
+                // create websocket instance
+                ws = new WebSocket("ws://" + host + ":" + port + uri);
 
-          // Handle incoming websocket message callback
-          ws.onmessage = function(evt) {
-          document.getElementById("jsonTerminal").innerHTML = "<pre>"+JSON.stringify(JSON.parse(evt.data),undefined,2)+"</pre>";
-              log(JSON.stringify(JSON.parse(evt.data),undefined,2));
-            alert("message received" + JSON.stringify(JSON.parse(evt.data),null,'\t'));
-            };
+                // Handle incoming websocket message callback
+                ws.onmessage = function(evt) {
+                    log("***Message Received***");
+                    $("#dataTerminal").empty();
+                    document.getElementById("dataTerminal").innerHTML = "<pre>"+JSON.stringify(JSON.parse(evt.data),undefined,2)+"</pre>";
+                    alert("message received");
+                };
 
-          // Close Websocket callback
-          ws.onclose = function(evt) {
-            log("***Connection Closed***");
-            alert("Connection close");
-            $("#host").css("background", "#ff0000");
-            $("#port").css("background", "#ff0000");
-            $("#uri").css("background",  "#ff0000");
-            $("div#message_details").empty();
+                // Close Websocket callback
+                ws.onclose = function(evt) {
+                    log("***Connection Closed***");
+                    alert("Connection close");
+                    $("#host").css("background", "#ff0000");
+                    $("#port").css("background", "#ff0000");
+                    $("#uri").css("background",  "#ff0000");
+                    $("div#message_details").empty();
+                };
 
-            };
+                // Open Websocket callback
+                ws.onopen = function(evt) {
+                    $("#host").css("background", "#008000");
+                    $("#port").css("background", "#008000");
+                    $("#uri").css("background", "#008000");
+                    $("div#message_details").show();
+                    log("***Connection Opened***");
+                };
+            });
 
-          // Open Websocket callback
-          ws.onopen = function(evt) {
-            $("#host").css("background", "#00ff00");
-            $("#port").css("background", "#00ff00");
-            $("#uri").css("background", "#00ff00");
-            $("div#message_details").show();
-            log("***Connection Opened***");
-          };
+            // Send websocket message function
+            $("#send").click(function(evt) {
+                log("Sending Message: "+$("#message").val());
+                ws.send($("#message").val());
+            });
+
         });
-
-        // Send websocket message function
-        $("#send").click(function(evt) {
-            log("Sending Message: "+$("#message").val());
-            ws.send($("#message").val());
-        });
-
-      });
     </script>
-  </head>
+</head>
 
-  <body>
-    <h1>Smart Politech</h1><br>
-    <h2>Tornado Websocket Neo4j-Py2neo </h2>
-    <h3>Jorge Merideño Galán</h3>
-    <div id="connection_details">
-      <label for="host">host:</label>
-      <input type="text" id="host" value="localhost" style="background:#ff0000;"/><br />
-      <label for="port">port:</label>
-      <input type="text" id="port" value="8888" style="background:#ff0000;"/><br />
-      <label for="uri">uri:</label>
-      <input type="text" id="uri" value="/ws" style="background:#ff0000;"/><br />
-      <input type="submit" id="open" value="open" />
+<body>
+<header>
+    <div id="headerImg">
+        <img src="img/uex.png" height="60" width="273" id="uexlogo"/>
+        <img src="img/epcc.png" height="189" width="200" id="epcclogo"/>
+        <img src="img/smartpolitech.png" height="544" width="645" id="splogo"/>
     </div>
-    <div id="message_details">
-        </br></br>
-        <label for="message">message:</label>
-        <input type="text" id="message" value="Hello World!"/><br />
-        <input type="submit" id="send" value="send" />
+    <div id="headerTitle">
+        <ul>
+            <li id="lileft"> <h2>Tornado Websocket Neo4j-Py2neo - Jorge Merideño Galán</h2></li>
+            <li class="links"><a href="#Doc"><h4>About</h4></a></li>
+            <li class="links"><a href="#Github"><h4>Github</h4></a></li>
+            <li class="links"><a href="#about"><h4>Doc</h4></a></li>
+        </ul>
     </div>
-    <div id="terminal">
-    </div>
-    <div id="jsonTerminal"></div>
-  </body>
+</header>
+<div id="connection_details">
+    <label for="host">host:</label>
+    <input type="text" class="conn_input" id="host" value="localhost"/><br>
+    <label for="port">port:</label>
+    <input type="text" class="conn_input" id="port" value="8888"/><br>
+    <label for="uri">uri :</label>
+    <input type="text" class="conn_input" id="uri" value="/ws"/><br>
+    <input type="submit" id="open" value="Connect" />
+</div>
+<div id="message_details">
+    </br></br>
+    <label for="message">message:</label>
+    <input type="text" id="message" value="All"/><br />
+    <input type="submit" id="send" value="send" />
+</div>
+<div id="terminal">
+    <p class="shell-top-bar">Websocket Terminal</p>
+    <ul class="shell-body" id="terminalMsg">
+        <li>log ...</li>
+    </ul>
+</div>
+<div id="dataTerminal"></div>
+</body>
 </html>
