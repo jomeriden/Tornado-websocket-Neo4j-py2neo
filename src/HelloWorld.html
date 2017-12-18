@@ -3,164 +3,7 @@
 <head>
     <title>Websocket-Neo4j</title>
     <meta charset="utf-8" />
-    <style type="text/css">
-
-        body {
-            text-align: center;
-            min-width: 500px;
-        }
-        
-        #headerImg #uexlogo{
-            float: left;
-            margin-top: 20px;
-            margin-left: 15px;
-        }
-        
-        #headerImg #epcclogo{
-            float: top;
-            width: 90px;
-            height: 90px;
-            margin-right: 11%;
-        }
-
-        #headerImg #splogo{
-            float: right;
-            width: 90px;
-            height: 90px;
-            margin-right: 25px;
-        }
-
-        #headerTitle{
-            padding-left: 10px;
-            color: white;
-            background-color: #333;
-            margin-bottom: 20px;
-        }
-
-        #headerTitle ul {
-
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: #333;
-        }
-
-        #headerTitle li {
-            float: right;
-        }
-
-        #headerTitle .links {
-            width: 100px;
-        }
-
-        #headerTitle li a {
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-        }
-
-        #headerTitle li a:hover {
-            background-color: #111;
-        }
-
-        #headerTitle #lileft{
-            padding-top: 10px;
-            float: left;
-        }
-
-        #connection_details{
-            margin: 0 auto;
-            background-color: green;
-            border-radius: 15px;
-            width: 350px;
-            height: 180px;
-            padding-top: 20px;
-        }
-
-        .conn_input{
-            background:#ff0000;
-            margin-bottom: 10px;
-            height: 27px;
-            width: 220px;
-            padding-left: 10px;
-            color: aliceblue;
-            border-radius: 10px;
-            border-color: black;
-        }
-
-        #connection_details #open{
-            width: 80%;
-            height: 35px;
-            background-color: #333333;
-            border-color: green;
-            border-radius: 8px;
-            color: white;
-        }
-
-        #connection_details #open:hover{
-            border-color: #111111;
-            background-color: #333333;
-        }
-
-        #terminal{
-            text-align: left;
-            width: 500px;
-            margin: 40px auto 0 auto;
-            box-shadow: 0 0 30px rgba(0,0,0,0.4);
-            border-radius: 3px;
-        }
-
-        .shell-top-bar {
-            text-align: center;
-            color: #525252;
-            padding: 5px 0;
-            margin: 0;
-            text-shadow: 1px 1px 0 rgba(255,255,255,0.5);
-            font-size: 0.85em;
-            border: 1px solid #CCCCCC;
-            border-bottom: none;
-            border-radius: 3px;
-            background: #f7f7f7;
-            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7f7f7', endColorstr='#B8B8B8',GradientType=0 ); /* IE6-9 */
-        }
-
-        .shell-body {
-            margin: 0;
-            padding: 5px;
-            list-style: none;
-            background: #141414;
-            color: white;
-            font: 0.8em 'Andale Mono', Consolas, 'Courier New';
-            line-height: 1.6em;
-            -webkit-border-bottom-right-radius: 3px;
-            -webkit-border-bottom-left-radius: 3px;
-            -moz-border-radius-bottomright: 3px;
-            -moz-border-radius-bottomleft: 3px;
-            border-bottom-right-radius: 3px;
-            border-bottom-left-radius: 3px;
-        }
-
-        .shell-body li:before {
-            content: '$';
-            position: absolute;
-            left: 0;
-            top: 0;
-        }
-
-        .shell-body li {
-            text-align: left;
-            word-wrap: break-word;
-            position: relative;
-            padding: 0 0 0 15px;
-        }
-
-        #dataTerminal{
-            text-align: left;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
     <script src="http://code.jquery.com/jquery.min.js"></script>
 
     <script>
@@ -168,7 +11,7 @@
         // log function
         log = function(data){
 
-            $('#terminalMsg').append("<li>" + data + "</li>");
+            $('#terminal-body').append("<li>" + data + "</li>");
 
             console.log(data);
         };
@@ -237,29 +80,30 @@
         <ul>
             <li id="lileft"> <h2>Tornado Websocket Neo4j-Py2neo - Jorge Merideño Galán</h2></li>
             <li class="links"><a href="#Doc"><h4>About</h4></a></li>
-            <li class="links"><a href="#Github"><h4>Github</h4></a></li>
+            <li class="links"><a href="https://github.com/jomeriden/Tornado-websocket-Neo4j-py2neo"><h4>Github</h4></a></li>
             <li class="links"><a href="#about"><h4>Doc</h4></a></li>
         </ul>
     </div>
 </header>
 <div id="connection_details">
-    <label for="host">host:</label>
-    <input type="text" class="conn_input" id="host" value="localhost"/><br>
-    <label for="port">port:</label>
-    <input type="text" class="conn_input" id="port" value="8888"/><br>
-    <label for="uri">uri :</label>
-    <input type="text" class="conn_input" id="uri" value="/ws"/><br>
-    <input type="submit" id="open" value="Connect" />
+    <form>
+        <label for="host">host:</label>
+        <input type="text" class="conn_input" id="host" value="localhost"/><br>
+        <label for="port">port:</label>
+        <input type="text" class="conn_input" id="port" value="8888"/><br>
+        <label for="uri">uri :</label>
+        <input type="text" class="conn_input" id="uri" value="/ws"/><br>
+        <input type="submit" id="open" value="Connect" />
+    </form>
 </div>
 <div id="message_details">
     </br></br>
-    <label for="message">message:</label>
-    <input type="text" id="message" value="All"/><br />
-    <input type="submit" id="send" value="send" />
+    <input type="text" id="message" placeholder="Insert data to show ..."/><br />
+    <input type="submit" id="send" value="Send" />
 </div>
 <div id="terminal">
-    <p class="shell-top-bar">Websocket Terminal</p>
-    <ul class="shell-body" id="terminalMsg">
+    <p id="terminal-top-bar">Websocket Terminal</p>
+    <ul id="terminal-body">
         <li>log ...</li>
     </ul>
 </div>

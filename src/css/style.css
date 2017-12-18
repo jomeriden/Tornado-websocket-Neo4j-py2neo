@@ -1,0 +1,188 @@
+ body {
+            text-align: center;
+            min-width: 600px;
+        }
+
+        #headerImg #uexlogo{
+            float: left;
+            margin-top: 20px;
+            margin-left: 15px;
+        }
+
+        #headerImg #epcclogo{
+            float: top;
+            width: 90px;
+            height: 90px;
+            margin-right: 11%;
+        }
+
+        #headerImg #splogo{
+            float: right;
+            width: 90px;
+            height: 90px;
+            margin-right: 25px;
+        }
+
+        #headerTitle{
+            padding-left: 10px;
+            color: white;
+            background-color: #333;
+            margin-bottom: 20px;
+        }
+
+        #headerTitle ul {
+
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+        }
+
+        #headerTitle li {
+            float: right;
+        }
+
+        #headerTitle .links {
+            width: 100px;
+        }
+
+        #headerTitle li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        #headerTitle li a:hover {
+            background-color: #111;
+        }
+
+        #headerTitle #lileft{
+            padding-top: 10px;
+            float: left;
+        }
+
+        #connection_details{
+            margin: 0 auto;
+            background-color: green;
+            border-radius: 15px;
+            width: 350px;
+            height: 180px;
+            padding-top: 20px;
+        }
+
+        .conn_input{
+            background:#ff0000;
+            margin-bottom: 10px;
+            height: 27px;
+            width: 220px;
+            padding-left: 10px;
+            color: aliceblue;
+            border-radius: 10px;
+            border-color: black;
+        }
+
+        #connection_details #open{
+            width: 80%;
+            height: 35px;
+            background-color: #333333;
+            border-color: green;
+            border-radius: 8px;
+            color: white;
+        }
+
+        #connection_details #open:hover{
+            border-color: #111111;
+            background-color: #333333;
+        }
+
+        #message_details{
+            padding-top: 10px;
+            margin: 0 auto;
+            width: 400px;
+            height: 100px;
+            border-radius: 15px;
+        }
+
+        #message_details #message{
+            width: 350px;
+            height: 30px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            text-align: center;
+            border-color: #111111;
+        }
+
+        #message_details #message:hover{
+            height: 40px;
+        }
+
+        #message_details #send{
+            width: 355px;
+            height: 30px;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            background-color: #333333;
+            color: white;
+            border-color: #333333;
+        }
+
+        #message_details #send:hover{
+            border-color: #111111;
+            font-size: 20px;
+            height: 37px;
+        }
+
+        #terminal{
+            text-align: left;
+            width: 500px;
+            margin: 40px auto 0 auto;
+            box-shadow: 0 0 30px rgba(0,0,0,0.4);
+            border-radius: 3px;
+        }
+
+        #terminal-top-bar {
+            text-align: center;
+            color: #525252;
+            padding: 5px 0;
+            margin: 0;
+            text-shadow: 1px 1px 0 rgba(255,255,255,0.5);
+            font-size: 0.85em;
+            border: 1px solid #CCCCCC;
+            border-bottom: none;
+            border-radius: 3px;
+            background: #f7f7f7;
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7f7f7', endColorstr='#B8B8B8',GradientType=0 ); /* IE6-9 */
+        }
+
+        #terminal-body {
+            margin: 0;
+            padding: 5px;
+            list-style: none;
+            background: #141414;
+            color: white;
+            font: 0.8em 'Andale Mono', Consolas, 'Courier New';
+            line-height: 1.6em;
+            border-bottom-right-radius: 3px;
+            border-bottom-left-radius: 3px;
+        }
+
+        #terminal-body li:before {
+            content: '$';
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        #terminal-body li {
+            text-align: left;
+            word-wrap: break-word;
+            position: relative;
+            padding: 0 0 0 15px;
+        }
+
+        #dataTerminal{
+            text-align: left;
+        }

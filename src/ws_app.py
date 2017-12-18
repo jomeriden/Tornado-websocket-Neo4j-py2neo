@@ -10,6 +10,11 @@ db = Graph()
 initialQuery = """
  MATCH (n:type) WHERE n.id={id} RETURN n
  """
+
+curlQuery = """
+ MATCH (n:type) WHERE n.id={id} RETURN n.query
+ """
+
 initialQueryList = """
  MATCH (n:type) RETURN n
  """
@@ -20,23 +25,37 @@ query4all = """
 
 
 def executeQuery(_id, _type):
-    if _id == "All":
+    if toCapitalize(_id) == "All":
         query = initialQueryList.replace("type", _type)
         data = db.run(query)
     else:
-        query = initialQuery.replace("type", _type)
-        data = db.run(query, id=_id)
+        if _id.find("show") == -1:
+            query = initialQuery.replace("type", _type)
+            data = db.run(query, id=_id.upper())
+        else:
+            query = curlQuery.replace("type", _type)
+            head, sep, tail = _id.partition('.')
+            print head + " " + tail
+            data = db.run(query, id=head.upper())
+            # resultCurl = json.dumps(aux, sort_keys=True, indent=4, separators=(',', ': '))
+            # resultCurl = resultCurl.replace("[", "")
+            # print resultCurl.replace("]", "")
     aux = []
-    for d in data:
-        print(d)
-        aux.append(d)
+    for i in data:
+        print(i)
+        aux.append(i)
     return aux
+
+
+def toCapitalize(data):
+    low = data.lower()
+    return low.capitalize()
 
 
 def getType(message):
     type = message.rpartition(':')[0]
-    print type
-    return type
+    print toCapitalize(type)
+    return toCapitalize(type)
 
 
 def getId(message):
@@ -46,7 +65,8 @@ def getId(message):
 
 
 def getJson(message):
-    if message == "All":
+
+    if toCapitalize(message) == "All":
         dataResult = json.dumps(executeQuery4All(), sort_keys=True, indent=4, separators=(',', ': '))
     else:
         nodeType = getType(message)
