@@ -74,6 +74,7 @@ def getJson(message):
         dataResult = json.dumps(executeQuery(nodeId, nodeType), sort_keys=True, indent=4, separators=(',', ': '))
     return dataResult
 
+
 def executeQuery4All():
     data = db.run(query4all)
     aux = []
@@ -83,9 +84,17 @@ def executeQuery4All():
     return aux
 
 
+class IndexHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render("index.html")
+
+
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
+    clients = []
+
     def open(self):
         print 'new connection'
+        WebSocketHandler.clients.append(self)
 
     def on_message(self, message):
         print 'message received: %s' % message
@@ -95,13 +104,17 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 
     def on_close(self):
         print 'connection closed'
+        WebSocketHandler.clients.remove(self)
 
     def check_origin(self, origin):
         return True
 
 
 application = tornado.web.Application([
+            (r'/', IndexHandler),
             (r'/ws', WebSocketHandler),
+            (r"/img/(.*)", tornado.web.StaticFileHandler, {"path": "./img"},),
+            (r"/css/(style.\css)", tornado.web.StaticFileHandler, {"path": "./css"},),
 ])
 
 if __name__ == "__main__":
