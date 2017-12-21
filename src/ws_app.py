@@ -1,3 +1,4 @@
+import os, subprocess
 import tornado.web
 import tornado.websocket
 import tornado.httpserver
@@ -24,22 +25,32 @@ query4all = """
  """
 
 
+def executeQueryCurl(_id, _type):
+    query = curlQuery.replace("type", _type)
+    head, sep, tail = _id.partition('.')
+    data = db.run(query, id=head.upper())
+    aux = []
+    for i in data:
+        aux.append(i)
+    resultCurl = json.dumps(aux, sort_keys=True, indent=4, separators=(',', ': '))
+    data = resultCurl.replace("[", "")
+    data = data.replace("]", "")
+    data = data.replace("\"c", "c")
+    data = data.replace("h\\\"", "h")
+    data = data.replace("\\", "")
+    output = subprocess.Popen(data, shell=True, stdout=subprocess.PIPE)
+    result = output.stdout.read()
+    print(result)
+    return result.decode('ascii')
+
+
 def executeQuery(_id, _type):
     if toCapitalize(_id) == "All":
         query = initialQueryList.replace("type", _type)
         data = db.run(query)
     else:
-        if _id.find("show") == -1:
-            query = initialQuery.replace("type", _type)
-            data = db.run(query, id=_id.upper())
-        else:
-            query = curlQuery.replace("type", _type)
-            head, sep, tail = _id.partition('.')
-            print head + " " + tail
-            data = db.run(query, id=head.upper())
-            # resultCurl = json.dumps(aux, sort_keys=True, indent=4, separators=(',', ': '))
-            # resultCurl = resultCurl.replace("[", "")
-            # print resultCurl.replace("]", "")
+        query = initialQuery.replace("type", _type)
+        data = db.run(query, id=_id.upper())
     aux = []
     for i in data:
         print(i)
@@ -65,13 +76,15 @@ def getId(message):
 
 
 def getJson(message):
-
     if toCapitalize(message) == "All":
         dataResult = json.dumps(executeQuery4All(), sort_keys=True, indent=4, separators=(',', ': '))
     else:
         nodeType = getType(message)
         nodeId = getId(message)
-        dataResult = json.dumps(executeQuery(nodeId, nodeType), sort_keys=True, indent=4, separators=(',', ': '))
+        if nodeId.find(".show") == -1:
+            dataResult = json.dumps(executeQuery(nodeId, nodeType), sort_keys=True, indent=4, separators=(',', ': '))
+        else:
+            dataResult = executeQueryCurl(nodeId, nodeType)
     return dataResult
 
 
