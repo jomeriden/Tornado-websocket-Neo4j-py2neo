@@ -40,7 +40,6 @@ def executeQueryCurl(_id, _type):
     data = data.replace("\\", "")
     output = subprocess.Popen(data, shell=True, stdout=subprocess.PIPE)
     result = output.stdout.read()
-    print(result)
     return result.decode('ascii')
 
 
@@ -92,7 +91,6 @@ def executeQuery4All():
     data = db.run(query4all)
     aux = []
     for d in data:
-        print(d)
         aux.append(d)
     return aux
 
