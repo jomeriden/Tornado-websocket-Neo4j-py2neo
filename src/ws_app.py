@@ -1,4 +1,4 @@
-import os, subprocess
+import subprocess
 import tornado.web
 import tornado.websocket
 import tornado.httpserver
@@ -7,6 +7,10 @@ from py2neo import Graph
 import json
 
 db = Graph()
+
+attributeQuery = """
+ MATCH (n:type) WHERE n.id={id} RETURN n.attribute
+ """
 
 initialQuery = """
  MATCH (n:type) WHERE n.id={id} RETURN n
@@ -56,6 +60,15 @@ def executeQuery(_id, _type):
         aux.append(i)
     return aux
 
+def executeQueryAttribute(_id, _type):
+    query = attributeQuery.replace("type", _type)
+    head, sep, tail = _id.partition('.')
+    query = query.replace("attribute", tail.lower())
+    data = db.run(query, id=head.upper())
+    aux = []
+    for i in data:
+        aux.append(i)
+    return aux
 
 def toCapitalize(data):
     low = data.lower()
@@ -80,10 +93,13 @@ def getJson(message):
     else:
         nodeType = getType(message)
         nodeId = getId(message)
-        if nodeId.find(".show") == -1:
+        if nodeId.find(".") == -1:
             dataResult = json.dumps(executeQuery(nodeId, nodeType), sort_keys=True, indent=4, separators=(',', ': '))
         else:
-            dataResult = executeQueryCurl(nodeId, nodeType)
+            if nodeId.find(".show") == -1:
+                dataResult = json.dumps(executeQueryAttribute(nodeId, nodeType), sort_keys=True, indent=4, separators=(',', ': '))
+            else:
+                dataResult = executeQueryCurl(nodeId, nodeType)
     return dataResult
 
 
