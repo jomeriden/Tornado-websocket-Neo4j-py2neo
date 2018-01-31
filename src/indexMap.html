@@ -58,6 +58,14 @@
   border-radius: 50%;
   cursor: pointer;
 }
+        .marker1 {
+  background-image: url('img/sensor.png');
+  background-size: cover;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+}
 
 
     </style>
@@ -77,14 +85,16 @@ var map = new mapboxgl.Map({
     zoom: 19 // starting zoom
 });
 
-//Queries a utilizar para obtener los datos de los sensores, habitaciones y el edificio
-//Match (d:Device)-[:BELONGS_TO]->(n:Room)-[:BELONGS_TO]->(f:Floor) where f.id="P00" return d
-//Match (n:Room)-[:BELONGS_TO]->(f:Floor) where f.id="P00" return n
-//match (n:Building) return n
+
 
 var geojson = {type: 'FeatureCollection',
   features: [
-  geojsonNeo4j
+  geojsonNeo4jP00
+  ]};
+
+var geojson1 = {type: 'FeatureCollection',
+  features: [
+  geojsonNeo4jP01
   ]};
 
 geojson.features.forEach(function(marker) {
@@ -92,6 +102,20 @@ geojson.features.forEach(function(marker) {
   // create a HTML element for each feature
   var el = document.createElement('div');
   el.className = 'marker';
+
+  // make a marker for each feature and add to the map
+  new mapboxgl.Marker(el)
+  .setLngLat(marker.geometry.coordinates)
+      .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+  .setHTML('<h3>' + marker.properties.title + '</h3><p>' + marker.properties.description + '</p>'))
+  .addTo(map);
+});
+
+geojson1.features.forEach(function(marker) {
+
+  // create a HTML element for each feature
+  var el = document.createElement('div');
+  el.className = 'marker1';
 
   // make a marker for each feature and add to the map
   new mapboxgl.Marker(el)
@@ -153,37 +177,63 @@ map.on('load', function () {
 var toggleableLayerIds = [ 'EPCC-INF-00', 'EPCC-INF-01' ];
 
 for (var i = 0; i < toggleableLayerIds.length; i++) {
-    var id = toggleableLayerIds[i];
+        var id = toggleableLayerIds[i];
 
-    var link = document.createElement('a');
-    link.href = '#';
-    if (i === 0){
-        link.className = 'active';
-    }else{
-        link.className = '';
-    }
-
-    link.textContent = id;
-
-    link.onclick = function (e) {
-        var clickedLayer = this.textContent;
-        e.preventDefault();
-        e.stopPropagation();
-
-        var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
-
-        if (visibility === 'visible') {
-            map.setLayoutProperty(clickedLayer, 'visibility', 'none');
-            this.className = '';
-        } else {
-            this.className = 'active';
-            map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
+        var link = document.createElement('a');
+        link.href = '#';
+        if (i === 0){
+            link.className = 'active';
+        }else{
+            link.className = '';
+            var markersNoneInit = document.getElementsByClassName('marker1'), i;
+                    for (var i = 0; i < markersNoneInit.length; i++) {
+                        markersNoneInit[i].style.display = 'none';
+                    }
         }
-    };
 
-    var layers = document.getElementById('menu');
-    layers.appendChild(link);
-}
+        link.textContent = id;
+
+        link.onclick = function (e) {
+            var clickedLayer = this.textContent;
+            e.preventDefault();
+            e.stopPropagation();
+
+            var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
+
+            if (visibility === 'visible') {
+                map.setLayoutProperty(clickedLayer, 'visibility', 'none');
+                this.className = '';
+                if (this.textContent === 'EPCC-INF-00'){
+                    var markers00 = document.getElementsByClassName('marker'), i;
+                    for (var i = 0; i < markers00.length; i++) {
+                        markers00[i].style.display = 'none';
+                    }
+                }else{
+                    var markers01 = document.getElementsByClassName('marker1'), i;
+                    for (var i = 0; i < markers01.length; i++) {
+                        markers01[i].style.display = 'none';
+                    }
+                }
+            } else {
+                this.className = 'active';
+                map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
+                if (this.textContent === 'EPCC-INF-00') {
+                    var markers00 = document.getElementsByClassName('marker'), i;
+                    for (var i = 0; i < markers00.length; i ++) {
+                        markers00[i].style.display = '';
+                    }
+                }else{
+                    var markers01 = document.getElementsByClassName('marker1'), i;
+                    for (var i = 0; i < markers01.length; i++) {
+                        markers01[i].style.display = '';
+                    }
+                }
+            }
+        };
+
+        var layers = document.getElementById('menu');
+        layers.appendChild(link);
+    }
 </script>
 
 
