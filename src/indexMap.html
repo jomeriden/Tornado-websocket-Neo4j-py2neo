@@ -51,7 +51,7 @@
         background: #3074a4;
     }
         .marker {
-  background-image: url('img/power.png');
+  background-image: url('img/sensor.png');
   background-size: cover;
   width: 50px;
   height: 50px;
@@ -82,19 +82,10 @@ var map = new mapboxgl.Map({
 //Match (n:Room)-[:BELONGS_TO]->(f:Floor) where f.id="P00" return n
 //match (n:Building) return n
 
-var geojson = {
-  type: 'FeatureCollection',
-  features: [{
-    type: 'Feature',
-    geometry: {
-      type: 'Point',
-      coordinates: [-6.34222947631213, 39.4786021219318]
-    },
-    properties: {
-      title: 'Escuela Politécnica Cáceres - Edificio Informática',
-      description: '1 Agua Informática y 2 S. Comunes 1'
-    }
-  }]};
+var geojson = {type: 'FeatureCollection',
+  features: [
+  geojsonNeo4j
+  ]};
 
 geojson.features.forEach(function(marker) {
 

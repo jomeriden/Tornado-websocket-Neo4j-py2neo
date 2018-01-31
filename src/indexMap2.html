@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>EPCC-INF</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.43.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.43.0/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
+        #menu {
+        background: #fff;
+        position: absolute;
+        z-index: 1;
+        top: 10px;
+        right: 10px;
+        border-radius: 3px;
+        width: 120px;
+        border: 1px solid rgba(0,0,0,0.4);
+        font-family: 'Open Sans', sans-serif;
+    }
+
+    #menu a {
+        font-size: 13px;
+        color: #404040;
+        display: block;
+        margin: 0;
+        padding: 0;
+        padding: 10px;
+        text-decoration: none;
+        border-bottom: 1px solid rgba(0,0,0,0.25);
+        text-align: center;
+    }
+
+    #menu a:last-child {
+        border: none;
+    }
+
+    #menu a:hover {
+        background-color: #f8f8f8;
+        color: #404040;
+    }
+
+    #menu a.active {
+        background-color: #3887be;
+        color: #ffffff;
+    }
+
+    #menu a.active:hover {
+        background: #3074a4;
+    }
+        .marker {
+  background-image: url('img/sensor.png');
+  background-size: cover;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+
+    </style>
+</head>
+<body>
+<nav id="menu"></nav>
+<div id='map'></div>
+<script>
+
+mapboxgl.accessToken = 'pk.eyJ1Ijoiam9tZXJpZGVuIiwiYSI6ImNqY3VhZHl6aDB0bWIyd3BnczV1NWpzYmkifQ.rOAbP1Hp8Z85ywg8qIL--A';
+var map = new mapboxgl.Map({
+    container: 'map', // container id
+    style: 'mapbox://styles/jomeriden/cjd080bq11arr2tmow85l3ph1',
+    center: [ -6.342167, 39.478944 ], // starting position
+    maxZoom: 19,
+    minZoom: 19,
+    zoom: 19 // starting zoom
+});
+
+//Queries a utilizar para obtener los datos de los sensores, habitaciones y el edificio
+//Match (d:Device)-[:BELONGS_TO]->(n:Room)-[:BELONGS_TO]->(f:Floor) where f.id="P00" return d
+//Match (n:Room)-[:BELONGS_TO]->(f:Floor) where f.id="P00" return n
+//match (n:Building) return n
+
+var geojson = {type: 'FeatureCollection',
+  features: [
+  {
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [ -6.34212121285005, 39.4789358451573 ]
+    },
+    properties: {
+      title: 'Escuela Politecnica Caceres - Edificio Informatica',
+      description: ' "Smart Politech TV Inform\u00e1tica"'
+    }
+  }, {
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [ -6.34218641527551, 39.4790312703844 ]
+    },
+    properties: {
+      title: 'Escuela Politecnica Caceres - Edificio Informatica',
+      description: ' "THR Pasillo"'
+    }
+  }, {
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [ -6.34230284817811, 39.478634862672 ]
+    },
+    properties: {
+      title: 'Escuela Politecnica Caceres - Edificio Informatica',
+      description: ' "Contador agua inform\u00e1tica planta baja hombres"'
+    }
+  }, {
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [ -6.34227236392725, 39.4787832298795 ]
+    },
+    properties: {
+      title: 'Escuela Politecnica Caceres - Edificio Informatica',
+      description: ' "THR Lab. F\u00edsica"'
+    }
+  }, {
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [ -6.34227744463573, 39.4789126424273 ]
+    },
+    properties: {
+      title: 'Escuela Politecnica Caceres - Edificio Informatica',
+      description: ' "THR Lab. Electr\u00f3nica"'
+    }
+  }, {
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [ -6.34222452058909, 39.4790276756012 ]
+    },
+    properties: {
+      title: 'Escuela Politecnica Caceres - Edificio Informatica',
+      description: ' "THC Sala Reuniones Robolab"'
+    }
+  }, {
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [ -6.34230030782387, 39.4790309435863 ]
+    },
+    properties: {
+      title: 'Escuela Politecnica Caceres - Edificio Informatica',
+      description: ' "Sensor de consumo el\u00e9ctrico de Salareuniones-Robolab (ACHO)"'
+    }
+  }, {
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [ -6.34217540707381, 39.479070486194 ]
+    },
+    properties: {
+      title: 'Escuela Politecnica Caceres - Edificio Informatica',
+      description: ' "THV Robolab 1"'
+    }
+  }, {
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [ -6.34221393577976, 39.4792626433394 ]
+    },
+    properties: {
+      title: 'Escuela Politecnica Caceres - Edificio Informatica',
+      description: ' "THR Aula 1"'
+    }
+  }, {
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [ -6.34204415543815, 39.4791273490781 ]
+    },
+    properties: {
+      title: 'Escuela Politecnica Caceres - Edificio Informatica',
+      description: ' "THV Cuarto SAI"'
+    }
+  }, {
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [ -6.3420166349339, 39.4791097019811 ]
+    },
+    properties: {
+      title: 'Escuela Politecnica Caceres - Edificio Informatica',
+      description: ' "Wibeee prueba"'
+    }
+  }, {
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [ -6.34204881275425, 39.4791155843472 ]
+    },
+    properties: {
+      title: 'Escuela Politecnica Caceres - Edificio Informatica',
+      description: ' "Consumo Elect. SAI"'
+    }
+  }, {
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [ -6.3420433086534, 39.4790319239818 ]
+    },
+    properties: {
+      title: 'Escuela Politecnica Caceres - Edificio Informatica',
+      description: ' "THR Lab. 2"'
+    }
+  }, {
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [ -6.34211982307014, 39.4789114933231 ]
+    },
+    properties: {
+      title: 'Escuela Politecnica Caceres - Edificio Informatica',
+      description: ' "THV Despacho Inform\u00e1ticos"'
+    }
+  }, {
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [ -6.34217526414829, 39.4787499242323 ]
+    },
+    properties: {
+      title: 'Escuela Politecnica Caceres - Edificio Informatica',
+      description: ' "THR Lab. Digitales"'
+    }
+  }, {
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [ -6.34221154672164, 39.4786407065381 ]
+    },
+    properties: {
+      title: 'Escuela Politecnica Caceres - Edificio Informatica',
+      description: ' "Contador Agua inform\u00e1tica p. baja mujeres"'
+    }
+  }, {
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [ -6.34223175832524, 39.47862024828 ]
+    },
+    properties: {
+      title: 'Escuela Politecnica Caceres - Edificio Informatica',
+      description: ' "THV Cuarto servidores"'
+    }
+  }
+  ]};
+
+geojson.features.forEach(function(marker) {
+
+  // create a HTML element for each feature
+  var el = document.createElement('div');
+  el.className = 'marker';
+
+  // make a marker for each feature and add to the map
+  new mapboxgl.Marker(el)
+  .setLngLat(marker.geometry.coordinates)
+      .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+  .setHTML('<h3>' + marker.properties.title + '</h3><p>' + marker.properties.description + '</p>'))
+  .addTo(map);
+});
+
+map.on('load', function () {
+    map.addLayer({
+        "id": "EPCC-INF-00",
+        "source": {
+            "type": "raster",
+            "url": "mapbox://jomeriden.bocq0xw7"
+        },
+        "type": "raster"
+    });
+    map.addLayer({
+        "id": "EPCC-INF-01",
+        "source": {
+            "type": "raster",
+            "url": "mapbox://jomeriden.bodub7zc"
+        },
+        "layout": {
+            "visibility": "none"
+        },
+        "type": "raster"
+    });
+    map.addLayer({
+        'id': 'maine',
+        'type': 'fill',
+        'source': {
+            'type': 'geojson',
+            'data': {
+                'type': 'Feature',
+                'geometry': {
+                    'type': 'Polygon',
+                    'coordinates': [[[-6.34220372242568, 39.4793228175059],
+                        [-6.34187879809926, 39.4792546328079],
+                        [-6.34203009098874, 39.4788224029669],
+                        [-6.34205598339601, 39.4788278891285],
+                        [-6.34214076833743, 39.4785900244351],
+                        [-6.34241441554359, 39.478648413043],
+                        [-6.34233166137921, 39.4788862775367],
+                        [-6.34235755378647, 39.4788909799567],
+                        [-6.34220372242568, 39.4793228175059]]]
+                }
+            }
+        },
+        'layout': {},
+        'paint': {
+            'fill-color': '#088',
+            'fill-opacity': 0.5
+        }
+    });
+});
+
+var toggleableLayerIds = [ 'EPCC-INF-00', 'EPCC-INF-01' ];
+
+for (var i = 0; i < toggleableLayerIds.length; i++) {
+    var id = toggleableLayerIds[i];
+
+    var link = document.createElement('a');
+    link.href = '#';
+    if (i === 0){
+        link.className = 'active';
+    }else{
+        link.className = '';
+    }
+
+    link.textContent = id;
+
+    link.onclick = function (e) {
+        var clickedLayer = this.textContent;
+        e.preventDefault();
+        e.stopPropagation();
+
+        var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
+
+        if (visibility === 'visible') {
+            map.setLayoutProperty(clickedLayer, 'visibility', 'none');
+            this.className = '';
+        } else {
+            this.className = 'active';
+            map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
+        }
+    };
+
+    var layers = document.getElementById('menu');
+    layers.appendChild(link);
+}
+</script>
+
+
+</body>
+</html>
