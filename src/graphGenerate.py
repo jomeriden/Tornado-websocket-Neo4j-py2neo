@@ -3,6 +3,8 @@ import json
 
 db = Graph()
 
+# Operations to generate the wep app
+
 
 class Sensor:
     def __init__(self,georef,descript):
@@ -114,15 +116,15 @@ def insertCode(code, floor):
         webread = f.read()
         webread = webread.replace("geojsonNeo4jP00", code)
         f.close()
-        webwrite = open("indexMap2.html", 'w')
+        webwrite = open("indexMapFinal.html", 'w')
         webwrite.write(webread)
         webwrite.close()
     else:
-        f = open("indexMap2.html", 'r')
+        f = open("indexMapFinal.html", 'r')
         webread = f.read()
         webread = webread.replace("geojsonNeo4jP01", code)
         f.close()
-        webwrite = open("indexMap2.html", 'w')
+        webwrite = open("indexMapFinal.html", 'w')
         webwrite.write(webread)
         webwrite.close()
 

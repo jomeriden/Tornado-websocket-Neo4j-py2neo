@@ -4,68 +4,69 @@
     <meta charset='utf-8' />
     <title>EPCC-INF</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src="http://code.jquery.com/jquery.min.js"></script>
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.43.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.43.0/mapbox-gl.css' rel='stylesheet' />
     <style>
         body { margin:0; padding:0; }
         #map { position:absolute; top:0; bottom:0; width:100%; }
         #menu {
-        background: #fff;
-        position: absolute;
-        z-index: 1;
-        top: 10px;
-        right: 10px;
-        border-radius: 3px;
-        width: 120px;
-        border: 1px solid rgba(0,0,0,0.4);
-        font-family: 'Open Sans', sans-serif;
-    }
+            background: #fff;
+            position: absolute;
+            z-index: 1;
+            top: 10px;
+            right: 10px;
+            border-radius: 3px;
+            width: 120px;
+            border: 1px solid rgba(0,0,0,0.4);
+            font-family: 'Open Sans', sans-serif;
+        }
 
-    #menu a {
-        font-size: 13px;
-        color: #404040;
-        display: block;
-        margin: 0;
-        padding: 0;
-        padding: 10px;
-        text-decoration: none;
-        border-bottom: 1px solid rgba(0,0,0,0.25);
-        text-align: center;
-    }
+        #menu a {
+            font-size: 13px;
+            color: #404040;
+            display: block;
+            margin: 0;
+            padding: 0;
+            padding: 10px;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(0,0,0,0.25);
+            text-align: center;
+        }
 
-    #menu a:last-child {
-        border: none;
-    }
+        #menu a:last-child {
+            border: none;
+        }
 
-    #menu a:hover {
-        background-color: #f8f8f8;
-        color: #404040;
-    }
+        #menu a:hover {
+            background-color: #f8f8f8;
+            color: #404040;
+        }
 
-    #menu a.active {
-        background-color: #3887be;
-        color: #ffffff;
-    }
+        #menu a.active {
+            background-color: #3887be;
+            color: #ffffff;
+        }
 
-    #menu a.active:hover {
-        background: #3074a4;
-    }
+        #menu a.active:hover {
+            background: #3074a4;
+        }
         .marker {
-  background-image: url('img/sensor.png');
-  background-size: cover;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  cursor: pointer;
-}
+            background-image: url('img/sensor.png');
+            background-size: cover;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
         .marker1 {
-  background-image: url('img/sensor.png');
-  background-size: cover;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  cursor: pointer;
-}
+            background-image: url('img/sensor.png');
+            background-size: cover;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
 
 
     </style>
@@ -74,22 +75,46 @@
 <nav id="menu"></nav>
 <div id='map'></div>
 <script>
+    $(document).ready(function () {
 
-mapboxgl.accessToken = 'pk.eyJ1Ijoiam9tZXJpZGVuIiwiYSI6ImNqY3VhZHl6aDB0bWIyd3BnczV1NWpzYmkifQ.rOAbP1Hp8Z85ywg8qIL--A';
-var map = new mapboxgl.Map({
-    container: 'map', // container id
-    style: 'mapbox://styles/jomeriden/cjd080bq11arr2tmow85l3ph1',
-    center: [ -6.342167, 39.478944 ], // starting position
-    maxZoom: 19,
-    minZoom: 19,
-    zoom: 19 // starting zoom
-});
+        var ws;
+        ws = new WebSocket("ws://158.49.245.167:8080/ws");
+
+        // Handle incoming websocket message callback
+        ws.onmessage = function(evt) {
+            alert("message received");
+        };
+
+        // Close Websocket callback
+        ws.onclose = function() {
+            alert("Connection close");
+
+        };
+
+        // Open Websocket callback
+        ws.onopen = function() {
+            alert("connection open")
+        };
+    });
 
 
 
-var geojson = {type: 'FeatureCollection',
-  features: [
-  {
+
+    mapboxgl.accessToken = 'pk.eyJ1Ijoiam9tZXJpZGVuIiwiYSI6ImNqY3VhZHl6aDB0bWIyd3BnczV1NWpzYmkifQ.rOAbP1Hp8Z85ywg8qIL--A';
+    var map = new mapboxgl.Map({
+        container: 'map', // container id
+        style: 'mapbox://styles/jomeriden/cjd080bq11arr2tmow85l3ph1',
+        center: [ -6.342167, 39.478944 ], // starting position
+        maxZoom: 19,
+        minZoom: 19,
+        zoom: 19 // starting zoom
+    });
+
+
+
+    var geojson = {type: 'FeatureCollection',
+        features: [
+            {
     type: 'Feature',
     geometry: {
       type: 'Point',
@@ -260,11 +285,11 @@ var geojson = {type: 'FeatureCollection',
       description: ' "THV Cuarto servidores"'
     }
   }
-  ]};
+        ]};
 
-var geojson1 = {type: 'FeatureCollection',
-  features: [
-  {
+    var geojson1 = {type: 'FeatureCollection',
+        features: [
+            {
     type: 'Feature',
     geometry: {
       type: 'Point',
@@ -345,88 +370,88 @@ var geojson1 = {type: 'FeatureCollection',
       description: ' "THR Despacho Luz (secretaria)"'
     }
   }
-  ]};
+        ]};
 
-geojson.features.forEach(function(marker) {
+    geojson.features.forEach(function(marker) {
 
-  // create a HTML element for each feature
-  var el = document.createElement('div');
-  el.className = 'marker';
+        // create a HTML element for each feature
+        var el = document.createElement('div');
+        el.className = 'marker';
 
-  // make a marker for each feature and add to the map
-  new mapboxgl.Marker(el)
-  .setLngLat(marker.geometry.coordinates)
-      .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
-  .setHTML('<h3>' + marker.properties.title + '</h3><p>' + marker.properties.description + '</p>'))
-  .addTo(map);
-});
-
-geojson1.features.forEach(function(marker) {
-
-  // create a HTML element for each feature
-  var el = document.createElement('div');
-  el.className = 'marker1';
-
-  // make a marker for each feature and add to the map
-  new mapboxgl.Marker(el)
-  .setLngLat(marker.geometry.coordinates)
-      .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
-  .setHTML('<h3>' + marker.properties.title + '</h3><p>' + marker.properties.description + '</p>'))
-  .addTo(map);
-});
-
-map.on('load', function () {
-    map.addLayer({
-        "id": "EPCC-INF-00",
-        "source": {
-            "type": "raster",
-            "url": "mapbox://jomeriden.bocq0xw7"
-        },
-        "type": "raster"
+        // make a marker for each feature and add to the map
+        new mapboxgl.Marker(el)
+            .setLngLat(marker.geometry.coordinates)
+            .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+                .setHTML('<h3>' + marker.properties.title + '</h3><p>' + marker.properties.description + '</p>'))
+            .addTo(map);
     });
-    map.addLayer({
-        "id": "EPCC-INF-01",
-        "source": {
-            "type": "raster",
-            "url": "mapbox://jomeriden.bodub7zc"
-        },
-        "layout": {
-            "visibility": "none"
-        },
-        "type": "raster"
+
+    geojson1.features.forEach(function(marker) {
+
+        // create a HTML element for each feature
+        var el = document.createElement('div');
+        el.className = 'marker1';
+
+        // make a marker for each feature and add to the map
+        new mapboxgl.Marker(el)
+            .setLngLat(marker.geometry.coordinates)
+            .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+                .setHTML('<h3>' + marker.properties.title + '</h3><p>' + marker.properties.description + '</p>'))
+            .addTo(map);
     });
-    map.addLayer({
-        'id': 'maine',
-        'type': 'fill',
-        'source': {
-            'type': 'geojson',
-            'data': {
-                'type': 'Feature',
-                'geometry': {
-                    'type': 'Polygon',
-                    'coordinates': [[[-6.34220372242568, 39.4793228175059],
-                        [-6.34187879809926, 39.4792546328079],
-                        [-6.34203009098874, 39.4788224029669],
-                        [-6.34205598339601, 39.4788278891285],
-                        [-6.34214076833743, 39.4785900244351],
-                        [-6.34241441554359, 39.478648413043],
-                        [-6.34233166137921, 39.4788862775367],
-                        [-6.34235755378647, 39.4788909799567],
-                        [-6.34220372242568, 39.4793228175059]]]
+
+    map.on('load', function () {
+        map.addLayer({
+            "id": "EPCC-INF-00",
+            "source": {
+                "type": "raster",
+                "url": "mapbox://jomeriden.bocq0xw7"
+            },
+            "type": "raster"
+        });
+        map.addLayer({
+            "id": "EPCC-INF-01",
+            "source": {
+                "type": "raster",
+                "url": "mapbox://jomeriden.bodub7zc"
+            },
+            "layout": {
+                "visibility": "none"
+            },
+            "type": "raster"
+        });
+        map.addLayer({
+            'id': 'maine',
+            'type': 'fill',
+            'source': {
+                'type': 'geojson',
+                'data': {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'Polygon',
+                        'coordinates': [[[-6.34220372242568, 39.4793228175059],
+                            [-6.34187879809926, 39.4792546328079],
+                            [-6.34203009098874, 39.4788224029669],
+                            [-6.34205598339601, 39.4788278891285],
+                            [-6.34214076833743, 39.4785900244351],
+                            [-6.34241441554359, 39.478648413043],
+                            [-6.34233166137921, 39.4788862775367],
+                            [-6.34235755378647, 39.4788909799567],
+                            [-6.34220372242568, 39.4793228175059]]]
+                    }
                 }
+            },
+            'layout': {},
+            'paint': {
+                'fill-color': '#088',
+                'fill-opacity': 0.5
             }
-        },
-        'layout': {},
-        'paint': {
-            'fill-color': '#088',
-            'fill-opacity': 0.5
-        }
+        });
     });
-});
 
-var toggleableLayerIds = [ 'EPCC-INF-00', 'EPCC-INF-01' ];
+    var toggleableLayerIds = [ 'EPCC-INF-00', 'EPCC-INF-01' ];
 
-for (var i = 0; i < toggleableLayerIds.length; i++) {
+    for (var i = 0; i < toggleableLayerIds.length; i++) {
         var id = toggleableLayerIds[i];
 
         var link = document.createElement('a');
@@ -436,9 +461,9 @@ for (var i = 0; i < toggleableLayerIds.length; i++) {
         }else{
             link.className = '';
             var markersNoneInit = document.getElementsByClassName('marker1'), i;
-                    for (var i = 0; i < markersNoneInit.length; i++) {
-                        markersNoneInit[i].style.display = 'none';
-                    }
+            for (var i = 0; i < markersNoneInit.length; i++) {
+                markersNoneInit[i].style.display = 'none';
+            }
         }
 
         link.textContent = id;
