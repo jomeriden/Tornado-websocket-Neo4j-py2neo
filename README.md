@@ -3,7 +3,7 @@
 # WebSocket Neo4SP
 
 El motivo principal por el cual se ha desarrollado este proyecto es el de dotar a
-la plataforma SmartPolitech, desarrollada en la Escuela Politécnica de Cáceres, de
+la plataforma **SmartPolitech**, desarrollada en la **Escuela Politécnica de Cáceres**, de
 un servicio que proporcione la información de la arquitectura, datos arquitectónicos,
 georeferencias y datos de monitorización de diferentes variables relativas al contexto
 de los edificios de dicha institución.
